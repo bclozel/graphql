@@ -6,9 +6,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-@EnableCaching
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
-@EnableAspectJAutoProxy
+@SpringBootApplication
 public class DemoApplication {
 
 	public static void main(String[] args) {

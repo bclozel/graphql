@@ -13,4 +13,13 @@ public class ThreadHelper {
                         "ThreadGroup: [" + thread.getThreadGroup().toString() + "] "
         );
     }
+
+    public static void sleep(long millis) {
+        try {
+            //process that takes some time
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

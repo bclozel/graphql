@@ -32,17 +32,19 @@ public class SellingService {
     public SellingService() {}
 
     public Map<Book, Integer> getSellings(Set<Book> books) {
-        ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getAuthors");
-        try {
-            //process that takes some time
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return books.stream().collect(Collectors.toMap(book -> book, book -> getSellingQtyForBook(book, sellings).qtySold()));
+        ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getSellings");
+        ThreadHelper.sleep(1000);
+        return books.stream().collect(Collectors.toMap(book -> book, book -> getSelling(book).qtySold()));
     }
 
-    private Selling getSellingQtyForBook(Book book, List<Selling> sellings) {
+    public Selling getSelling(Book book) {
+        ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getSelling");
+        ThreadHelper.sleep(1000);
+        return getSellingInternal(book);
+    }
+
+    private Selling getSellingInternal(Book book) {
         return sellings.stream().filter(selling -> selling.bookId() == book.bookId()).findFirst().orElse(new Selling(book.bookId(), 0));
     }
+
 }
