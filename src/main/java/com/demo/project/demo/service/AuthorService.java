@@ -1,5 +1,6 @@
 package com.demo.project.demo.service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import com.demo.project.demo.entity.Author;
 import com.demo.project.demo.entity.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;
 
@@ -31,10 +33,10 @@ public class AuthorService {
 	public AuthorService() {
 	}
 
-	public Map<Book, Author> getAuthors(Set<Book> books) {
-		ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getAuthors");
-		ThreadHelper.sleep(1000);
-		return books.stream().collect(Collectors.toMap(book -> book, this::getAuthorInternal));
+	public Mono<Map<Book, Author>> getAuthors(List<Book> books) {
+		return Mono.fromSupplier(() -> books.stream().collect(Collectors.toMap(book -> book, this::getAuthorInternal)))
+				.delayElement(Duration.ofSeconds(1))
+				.doOnNext(map -> ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getAuthors"));
 	}
 
 	public CompletableFuture<Author> getAuthor(Book book) {
