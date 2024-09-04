@@ -1,5 +1,7 @@
 package com.demo.project.demo.controller;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.demo.project.demo.entity.Author;
 import com.demo.project.demo.entity.Book;
 import com.demo.project.demo.service.AuthorService;
@@ -17,7 +19,7 @@ public class AuthorController {
 	}
 
 	@SchemaMapping(typeName = "Book", field = "author")
-	public Author books(Book book) {
+	public CompletableFuture<Author> books(Book book) {
 		return service.getAuthor(book);
 	}
 }

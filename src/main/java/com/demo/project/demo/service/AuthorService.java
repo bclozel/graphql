@@ -3,6 +3,7 @@ package com.demo.project.demo.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import com.demo.project.demo.ThreadHelper;
@@ -36,11 +37,14 @@ public class AuthorService {
 		return books.stream().collect(Collectors.toMap(book -> book, this::getAuthorInternal));
 	}
 
-	public Author getAuthor(Book book) {
-		ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getAuthor");
-		ThreadHelper.sleep(1000);
-		return getAuthorInternal(book);
+	public CompletableFuture<Author> getAuthor(Book book) {
+		return CompletableFuture.supplyAsync(() -> {
+			ThreadHelper.log(log, Thread.currentThread(), AuthorService.class, "getAuthor");
+			ThreadHelper.sleep(1000);
+			return getAuthorInternal(book);
+		});
 	}
+
 
 	private Author getAuthorInternal(Book book) {
 		return authors.stream().filter(author -> author.authorId() == book.authorId()).findFirst().orElse(null);
